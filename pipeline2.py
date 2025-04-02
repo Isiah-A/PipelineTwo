@@ -5,8 +5,9 @@ store_dict = {
     "Days": 0,
     "total_items": 0,
     "total_revenue": 0,
-    "minimum revenue": 0,
-    "maximum revenue": 0
+    "minimum_revenue": 0,
+    "maximum_revenue": 0,
+    "Transactions": 0
 }
 stores = {}
 
@@ -26,24 +27,43 @@ with open("store_sales.csv", 'r') as file:
             stores[current_store] = store_dict.copy()
         stores[current_store]["Days"] += 1
         stores[current_store]["total_items"] += int(line[2])
-        stores[current_store]["total_revenue"] += x
+        stores[current_store]["total_revenue"] += round(x, 1)
+
+        if stores[current_store]["minimum_revenue"] is None or x < stores[current_store]["minimum_revenue"]:
+            stores[current_store]["minimum_revenue"] = x
+
+        if stores[current_store]["maximum_revenue"] is None or x > stores[current_store]["maximum_revenue"]:
+            stores[current_store]["maximum_revenue"] += x
+
+        lines += 1
 
 
-        # Update the appropriate store's statistics:
-        #   - Increment day count
-        #   - Add to total items
-        #   - Add to total revenue
-        #   - Update min revenue if current is lower
-        #   - Update max revenue if current is higher
+store_avg = {}
+for store_id, data in stores.items():
+    days = data["Days"]
+    if days > 0:
+        avg_items = data["total_items"] // days
+        avg_revenue = data["total_revenue"] // days
+        store_avg[store_id] = {"avg_items_per_day": avg_items,
+                                   "avg_revenue_per_day": avg_revenue
+        }
+    else:
+        store_avg[store_id] = {
+            "avg_items_per_day": 0,
+            "avg_revenue_per_day": 0
+        }
 
-# Calculate averages for each store
-# For each store in your data structure:
-    # Calculate average items per day (total_items / days)
-    # Calculate average revenue per day (total_revenue / days)
 
-# Determine which store had the highest average daily revenue
-# Initialize variables to track best store and its revenue
-# Loop through stores and compare average revenues
+highest_avg = 0
+best_store = None
+for store_id, average in store_avg.items():
+    if average["avg_revenue_per_day"] > highest_avg:
+        highest = average["avg_revenue_per_day"]
+        best_store = store_id
 
-# Print a summary of statistics for each store
-# Print which store had the highest average daily revenue
+
+print(f"Total number of items sold: {sum_of_items}")
+print(f"Total number of transactions: {lines}")
+print(store_avg)
+print(f"The best store is: {best_store}")
+
