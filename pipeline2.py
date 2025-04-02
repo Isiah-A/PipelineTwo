@@ -1,31 +1,33 @@
-# Exercise: Process store_sales.csv and calculate basic statistics
-# Your task is to complete this outline with working code
-#
-# See ./Notes.md for some more instructions and explanations.
-pass
+import csv
 
-# Import the csv module
-# Import any other modules you need (e.g., collections for defaultdict)
 
-# Initialize data structures to hold our results
-# Hint: Consider using a dictionary with store_id as keys
-# For each store, you'll need to track:
-#   - Count of days
-#   - Total items sold
-#   - Total revenue
-#   - Minimum revenue
-#   - Maximum revenue
+store_dict = {
+    "Days": 0,
+    "total_items": 0,
+    "total_revenue": 0,
+    "minimum revenue": 0,
+    "maximum revenue": 0
+}
+stores = {}
 
-# Open the CSV file for reading
-# Remember to use "with" to ensure the file gets closed properly
+with open("store_sales.csv", 'r') as file:
+    csv_reader = csv.reader(file)
+    sum_of_items = 0
+    lines = 0
+    for line in csv_reader:
+        print(line)
+        if lines == 0:
+            lines += 1
+            continue
+        current_store = line[1]
+        sum_of_items += int(line[2])
+        x = round(float(line[3]), 2) #Revenue variable
+        if stores.get(current_store) is None:
+            stores[current_store] = store_dict.copy()
+        stores[current_store]["Days"] += 1
+        stores[current_store]["total_items"] += int(line[2])
+        stores[current_store]["total_revenue"] += x
 
-    # Create a CSV reader
-
-    # Read the header row first
-
-    # Loop through each row in the CSV file
-        # Extract values from each row (date, store_id, items_sold, revenue)
-        # Convert numerical values to the right data types (int, float)
 
         # Update the appropriate store's statistics:
         #   - Increment day count
